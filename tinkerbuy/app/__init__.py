@@ -11,14 +11,18 @@ app = Flask(__name__)
 
 # Load configuration from config.py
 app.config.from_object('config.app_config')
-'''
-# Configure database
-from db import configure_db
-configure_db(app)
 
 # Initialize database
 db = SQLAlchemy(app)
 
+# Import models
+from app.models import User, Product, Order, Payment, CartItem, OrderItem 
+
+# Create database tables if they don't exist
+with app.app_context():
+    db.create_all()
+
+'''
 # Initialize login manager
 login_manager = LoginManager(app)
 login_manager.login_view = 'customer.login'
@@ -33,29 +37,30 @@ api = Api(app)
 CORS(app)
 '''
 # Import blueprints
-from app.admin import admin
-from app.customer import customer
-#from app.auth import auth
+from app.blueprints import auth
+from app.blueprints import admin
+from app.blueprints import customer
+from app.blueprints import cart
 '''
 from app.products import products
 from app.orders import orders
 from app.payments import payments
 from app.reports import reports
 '''
+# Import views 
+from app.admin import * 
+from app.auth import *
+from app.cart import *
+from app.customer import * 
+
 # Register blueprints
 app.register_blueprint(admin, url_prefix="/")
 app.register_blueprint(customer)
+app.register_blueprint(auth)
+app.register_blueprint(cart) # need a prefix like /logged_in_User 
 '''
 app.register_blueprint(products)
 app.register_blueprint(orders)
 app.register_blueprint(payments)
 app.register_blueprint(reports)
-'''
-'''
-# Import models
-from app.models import User, Product, Order, Payment, Report
-
-# Create database tables if they don't exist
-with app.app_context():
-    db.create_all()
 '''

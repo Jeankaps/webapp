@@ -5,13 +5,14 @@ from app import db
 
 # User model
 class User(UserMixin, db.Model):
+    __tablename__ = 'User'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
     role = db.Column(db.String(20), default='customer')
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(datetime.timezone.utc))
+    updated_at = db.Column(db.DateTime, onupdate=lambda: datetime.now(datetime.timezone.utc))
 
     # Set password
     def set_password(self, password):
@@ -60,28 +61,31 @@ class User(UserMixin, db.Model):
 
 # Product model
 class Product(db.Model):
+    __tablename__ = 'Product'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text, nullable=False)
     price = db.Column(db.Float, nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(datetime.timezone.utc))
+    updated_at = db.Column(db.DateTime, onupdate=lambda: datetime.now(datetime.timezone.utc))
 
     # Relationship with OrderItem model
     order_items = db.relationship('OrderItem', backref='product', lazy='dynamic')
 
 # Order model
 class Order(db.Model):
+    __tablename__ = 'Order'
     id = db.Column(db.Integer, primary_key=True)
     customer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(datetime.timezone.utc))
 
     # Relationship with OrderItem model
     order_items = db.relationship('OrderItem', backref='order', lazy='dynamic')
 
 # OrderItem model
 class OrderItem(db.Model):
+    __tablename__ = 'OrderItem'
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=False)
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
@@ -89,14 +93,29 @@ class OrderItem(db.Model):
 
 # Payment model
 class Payment(db.Model):
+    __tablename__ = 'Payment'
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=False)
     amount = db.Column(db.Float, nullable=False)
     payment_method = db.Column(db.String(255), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    card_id = db.Column(db.Integer, db.ForeignKey('card.id'), nullable=False)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(datetime.timezone.utc))
+
+# Card model
+class Card(db.Model):
+    __tablename__ = 'Card'
+    id = db.Column(db.Integer, primary_key=True)
+    customer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    card_number = db.Column(db.String(19), nullable=False)
+    exp_date = db.Column(db.DateTime, nullable=False)
+    CVV = db.Column(db.String(3), nullable=False)
+    cardholder_name = db.Column(db.String(255), nullable=False)
+    billing_address = db.Column(db.String(255), nullable=False)
+    credit_limit = db.Column(db.Numeric(10,2), nullable=False)
 
 # CartItem model
 class CartItem(db.Model):
+    __tablename__ = 'CartItem'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
