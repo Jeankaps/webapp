@@ -32,18 +32,20 @@ api = Api(app)
 # Initialize CORS
 CORS(app)
 '''
-'''
 # Import blueprints
 from app.admin import admin
 from app.customer import customer
+#from app.auth import auth
+'''
 from app.products import products
 from app.orders import orders
 from app.payments import payments
 from app.reports import reports
-
+'''
 # Register blueprints
-app.register_blueprint(admin)
+app.register_blueprint(admin, url_prefix="/")
 app.register_blueprint(customer)
+'''
 app.register_blueprint(products)
 app.register_blueprint(orders)
 app.register_blueprint(payments)

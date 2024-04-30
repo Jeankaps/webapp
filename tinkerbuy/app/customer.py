@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from flask_login import login_user, logout_user, current_user
+from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 
 # Create blueprint
@@ -8,6 +8,7 @@ customer = Blueprint('customer', __name__)
 # Customer registration route
 @customer.route('/customer/register', methods=['GET', 'POST'])
 def register():
+    '''
     if request.method == 'POST':
         # Get form data
         name = request.form['name']
@@ -31,7 +32,10 @@ def register():
         return redirect(url_for('customer.login'))
 
     return render_template('customer/register.html')
+    '''
+    return "<h1>REGISTER</h1>"
 
+'''
 # Customer login route
 @customer.route('/customer/login', methods=['GET', 'POST'])
 def login():
@@ -66,3 +70,4 @@ def logout():
     logout_user()
     flash('Logged out successfully!', 'success')
     return redirect(url_for('customer.login'))
+    '''
