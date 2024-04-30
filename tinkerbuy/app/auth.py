@@ -2,6 +2,9 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.blueprints import auth
+from app.forms import RegisterForm, LoginForm
+from app.models import User
+from app import db 
 
 # index page
 @auth.route('/')
@@ -13,65 +16,42 @@ def index():
 @auth.route('/register/', methods=['GET', 'POST'])
 @auth.route('/signup/', methods=['GET', 'POST'])
 def register():
-    '''
-    if request.method == 'POST':
-        # Get form data
-        name = request.form['name']
-        email = request.form['email']
-        password = request.form['password']
-
-        # Hash password
-        hashed_password = generate_password_hash(password)
-
-        # Create new customer
-        new_customer = Customer(name=name, email=email, password=hashed_password)
-
-        # Add customer to database
-        db.session.add(new_customer)
+    form = RegisterForm()
+    if  form.validate_on_submit():
+        hashed_password = generate_password_hash(form.password1.data)
+        new_user = User(name = form.username.data,
+                    email = form.email_address.data,
+                    password = hashed_password)
+        db.session.add(new_user)
         db.session.commit()
-
-        # Flash success message
-        flash('Customer registered successfully!', 'success')
-
-        # Redirect to login page
-        return redirect(url_for('auth.login'))
-
-    return render_template('auth/register.html')
-    '''
-    return render_template("auth/signup.html")
+        login_user(new_user)
+        flash(f'Account registered successfully!', 'success')
+        return redirect(url_for( 'products.product_list' ))
+    if form.errors != {}:
+        for err_msg in form.errors.values():
+            flash(err_msg, 'danger')
+    return render_template("auth/signup.html", form=form)
 
 # auth login route
-@auth.route('/login', methods=['GET', 'POST'])
+@auth.route('/login/', methods=['GET', 'POST'])
 def login():
-    """
-    if request.method == 'POST':
-        # Get form data
-        email = request.form['email']
-        password = request.form['password']
-
-        # Get customer from database
-        customer = Customer.query.filter_by(email=email).first()
-
-        # Check if customer exists and password is correct
-        if customer and check_password_hash(customer.password, password):
-            login_user(customer)
-            flash('Logged in successfully!', 'success')
-            return redirect(url_for('customer.dashboard'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(name=form.username.data).first()
+        if user and user.check_password(password=form.password.data):
+            login_user(user)
+            flash(f'Succes! You are logged in as: {user.name}', category='success')
+            return redirect(url_for('products.product_list'))
         else:
-            flash('Invalid email or password.', 'danger')
+            flash('Username or password is not correct. Please, try again.', category='danger')
 
-    return render_template('customer/login.html')
-"""
-    return "AUTH LOGIN"
+    return render_template('auth/login.html', form=form)
 
 # Customer logout route
 @auth.route('/logout/')
-#@login_required
+@login_required
 def logout():
-    '''
     logout_user()
     flash('Logged out successfully!', 'success')
-    return redirect(url_for('auth.login'))
-    '''
-    return "AUTH LOGOUT"
+    return redirect(url_for('auth.index'))
 

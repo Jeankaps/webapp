@@ -1,6 +1,6 @@
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import datetime
+from datetime import datetime, timezone 
 from app import db
 
 # User model
@@ -11,8 +11,8 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(255), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
     role = db.Column(db.String(20), default='customer')
-    created_at = db.Column(db.DateTime, default=lambda: datetime.now(datetime.timezone.utc))
-    updated_at = db.Column(db.DateTime, onupdate=lambda: datetime.now(datetime.timezone.utc))
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    updated_at = db.Column(db.DateTime, onupdate=lambda: datetime.now(timezone.utc))
 
     # Set password
     def set_password(self, password):
@@ -24,24 +24,24 @@ class User(UserMixin, db.Model):
 
     # Add to cart helper method
     def add_to_cart(self, product):
-        cart_item = CartItem.query.filter_by(user_id=self.id, product_id=product.id).first()
+        cart_item = CartItem.query.filter_by(user_id=self.id, product_id=Product.id).first()
         if cart_item:
             cart_item.quantity += 1
         else:
-            cart_item = CartItem(user_id=self.id, product_id=product.id, quantity=1)
+            cart_item = CartItem(user_id=self.id, product_id=Product.id, quantity=1)
         db.session.add(cart_item)
         db.session.commit()
 
     # Remove from cart helper method
     def remove_from_cart(self, product):
-        cart_item = CartItem.query.filter_by(user_id=self.id, product_id=product.id).first()
+        cart_item = CartItem.query.filter_by(user_id=self.id, product_id=Product.id).first()
         if cart_item:
             db.session.delete(cart_item)
             db.session.commit()
 
     # Update cart item quantity helper method
     def update_cart_item(self, product, quantity):
-        cart_item = CartItem.query.filter_by(user_id=self.id, product_id=product.id).first()
+        cart_item = CartItem.query.filter_by(user_id=self.id, product_id=Product.id).first()
         if cart_item:
             cart_item.quantity = quantity
             db.session.commit()
@@ -77,7 +77,7 @@ class Product(db.Model):
 class Order(db.Model):
     __tablename__ = 'Order'
     id = db.Column(db.Integer, primary_key=True)
-    customer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    customer_id = db.Column(db.Integer, db.ForeignKey('User.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(datetime.timezone.utc))
 
     # Relationship with OrderItem model
@@ -87,25 +87,25 @@ class Order(db.Model):
 class OrderItem(db.Model):
     __tablename__ = 'OrderItem'
     id = db.Column(db.Integer, primary_key=True)
-    order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=False)
-    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+    order_id = db.Column(db.Integer, db.ForeignKey('Order.id'), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('Product.id'), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
 
 # Payment model
 class Payment(db.Model):
     __tablename__ = 'Payment'
     id = db.Column(db.Integer, primary_key=True)
-    order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=False)
+    order_id = db.Column(db.Integer, db.ForeignKey('Order.id'), nullable=False)
     amount = db.Column(db.Float, nullable=False)
     payment_method = db.Column(db.String(255), nullable=False)
-    card_id = db.Column(db.Integer, db.ForeignKey('card.id'), nullable=False)
+    card_id = db.Column(db.Integer, db.ForeignKey('Card.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(datetime.timezone.utc))
 
 # Card model
 class Card(db.Model):
     __tablename__ = 'Card'
     id = db.Column(db.Integer, primary_key=True)
-    customer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    customer_id = db.Column(db.Integer, db.ForeignKey('User.id'), nullable=False)
     card_number = db.Column(db.String(19), nullable=False)
     exp_date = db.Column(db.DateTime, nullable=False)
     CVV = db.Column(db.String(3), nullable=False)
@@ -117,6 +117,6 @@ class Card(db.Model):
 class CartItem(db.Model):
     __tablename__ = 'CartItem'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('User.id'), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('Product.id'), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)

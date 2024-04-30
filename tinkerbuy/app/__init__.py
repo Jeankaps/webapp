@@ -22,11 +22,17 @@ from app.models import User, Product, Order, Payment, CartItem, OrderItem
 with app.app_context():
     db.create_all()
 
-'''
 # Initialize login manager
 login_manager = LoginManager(app)
-login_manager.login_view = 'customer.login'
+login_manager.login_view = 'auth.login'
 
+# User loader
+@login_manager.user_loader
+def load_user(user_id):
+    # Load and return the usr from the database based on user_id
+    return User.query.get(int(user_id))
+
+'''
 # Initialize migration engine
 migrate = Migrate(app, db)
 
@@ -41,8 +47,8 @@ from app.blueprints import auth
 from app.blueprints import admin
 from app.blueprints import customer
 from app.blueprints import cart
+from app.blueprints import products
 '''
-from app.products import products
 from app.orders import orders
 from app.payments import payments
 from app.reports import reports
@@ -52,14 +58,15 @@ from app.admin import *
 from app.auth import *
 from app.cart import *
 from app.customer import * 
+from app.products import * 
 
 # Register blueprints
 app.register_blueprint(admin, url_prefix="/")
 app.register_blueprint(customer)
 app.register_blueprint(auth)
 app.register_blueprint(cart) # need a prefix like /logged_in_User 
-'''
 app.register_blueprint(products)
+'''
 app.register_blueprint(orders)
 app.register_blueprint(payments)
 app.register_blueprint(reports)

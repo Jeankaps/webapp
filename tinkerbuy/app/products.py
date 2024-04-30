@@ -1,15 +1,15 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required
+from app.blueprints import products
+from app.models import Product
 
-# Create blueprint
-products = Blueprint('products', __name__)
 
 # Product list route
 @products.route('/products')
 def product_list():
     products = Product.query.all()
     return render_template('product/list.html', products=products)
-
+'''
 # Product create route
 @products.route('/products/create', methods=['GET', 'POST'])
 @login_required
@@ -81,3 +81,4 @@ def product_delete(product_id):
 
     # Redirect to product list page
     return redirect(url_for('products.product_list'))
+    '''
