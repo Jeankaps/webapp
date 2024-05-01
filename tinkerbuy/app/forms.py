@@ -33,3 +33,4 @@ class PurchaseItemForm(FlaskForm):
 class SearchFilterForm(FlaskForm):
     query = StringField(label="Search" )
     submit = SubmitField(label="q")
+

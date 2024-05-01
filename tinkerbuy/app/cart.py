@@ -69,7 +69,7 @@ def cart_update(product_id):
 
     '''
 # Cart checkout route
-@cart.route('/cart/checkout')
+@cart.route('/cart/checkout', methods=['GET','POST'])
 @login_required
 def cart_checkout():
     # Get cart items for current user
@@ -78,15 +78,22 @@ def cart_checkout():
     # Calculate total price
     total_price = sum(item.product.price * item.quantity for item in cart_items)
 
+    print('*'*80)
     # Create new order
     new_order = Order(customer_id=current_user.id)
 
+    print(f"ORDER_  =========>  {new_order.id=}")
     # Add cart items to order
     for item in cart_items:
-        new_order.order_items.append(OrderItem(product_id=item.product.id, quantity=item.quantity))
+        new_order.order_items.append(OrderItem(product_id=item.product_id, quantity=item.quantity))
 
     # Create new payment
-    new_payment = Payment(order_id=new_order.id, amount=total_price, payment_method='Cash')
+    print('*'*80)
+    print(f"ORDER_ITEM_ID =========>  {new_order.id=}")
+    print(f"ORDER_ITEM_ID.id =========>  {new_order.order_items=}")
+    print('*'*80)
+    #new_payment = Payment(order_id=new_order.id, amount=total_price, payment_method='Cash')
+    new_payment = Payment(amount=total_price, payment_method='Cash')
 
     # Add order and payment to database
     db.session.add(new_order)

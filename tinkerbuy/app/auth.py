@@ -41,6 +41,8 @@ def login():
         if user and user.check_password(password=form.password.data):
             login_user(user)
             flash(f'Succes! You are logged in as: {user.name}', category='success')
+            if current_user.role == 'administrator':
+                return redirect(url_for('admin.dashboard'))
             return redirect(url_for('products.product_list'))
         else:
             flash('Username or password is not correct. Please, try again.', category='danger')

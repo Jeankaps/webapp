@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import render_template, request, flash, redirect, url_for
 from flask_login import login_required
 import pandas as pd
 import numpy as np
@@ -6,8 +6,37 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from app.blueprints import orders
 from app.blueprints import reports
+from app.models import *
 
+@reports.route('/reports/sales')
+#def generate_sales_report(start_date, end_date):
+def generate_sales_report(start_date, end_date):
+   
+    # Filter order items based on the date range
+    #order_items = OrderItem.query.join(Order).filter(Order.created_at >= start_date, Order.created_at <= end_date).all()
+    order_items = OrderItem.query.join(Order).all()
 
+    # Calculate total revenue and total orders
+    total_revenue = sum(item.quantity * item.product.price for item in order_items)
+    total_orders = len(set(item.order_id for item in order_items))
+
+    # Calculate product-wise sales
+    product_sales = {}
+    for item in order_items:
+        product_sales.setdefault(item.product.name, 0)
+        product_sales[item.product.name] += item.quantity * item.product.price
+
+    # Create a dictionary with the calculated data
+    sales_report = {
+        #'start_date': start_date,
+        #'end_date': end_date,
+        'total_revenue': total_revenue,
+        'total_orders': total_orders,
+        'product_sales': product_sales
+    }
+
+    return sales_report
+'''
 # Sales report route
 @reports.route('/reports/sales')
 @login_required
@@ -36,7 +65,7 @@ def sales_report():
     }
 
     return render_template('reports/sales.html', report=report)
-
+'''
 '''
 # Inventory report route
 @reports.route('/reports/inventory')

@@ -69,8 +69,8 @@ class Product(db.Model):
     description = db.Column(db.Text, nullable=False)
     price = db.Column(db.Float, nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
-    created_at = db.Column(db.DateTime, default=lambda: datetime.now(datetime.timezone.utc))
-    updated_at = db.Column(db.DateTime, onupdate=lambda: datetime.now(datetime.timezone.utc))
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    updated_at = db.Column(db.DateTime, onupdate=lambda: datetime.now(timezone.utc))
 
     # Relationship with OrderItem model
     order_items = db.relationship('OrderItem', backref='product', lazy='dynamic')
@@ -80,7 +80,7 @@ class Order(db.Model):
     __tablename__ = 'Order'
     id = db.Column(db.Integer, primary_key=True)
     customer_id = db.Column(db.Integer, db.ForeignKey('User.id'), nullable=False)
-    created_at = db.Column(db.DateTime, default=lambda: datetime.now(datetime.timezone.utc))
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
     # Relationship with OrderItem model
     order_items = db.relationship('OrderItem', backref='order', lazy='dynamic')
@@ -93,15 +93,6 @@ class OrderItem(db.Model):
     product_id = db.Column(db.Integer, db.ForeignKey('Product.id'), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
 
-# Payment model
-class Payment(db.Model):
-    __tablename__ = 'Payment'
-    id = db.Column(db.Integer, primary_key=True)
-    order_id = db.Column(db.Integer, db.ForeignKey('Order.id'), nullable=False)
-    amount = db.Column(db.Float, nullable=False)
-    payment_method = db.Column(db.String(255), nullable=False)
-    card_id = db.Column(db.Integer, db.ForeignKey('Card.id'), nullable=False)
-    created_at = db.Column(db.DateTime, default=lambda: datetime.now(datetime.timezone.utc))
 
 # Card model
 class Card(db.Model):
@@ -114,6 +105,20 @@ class Card(db.Model):
     cardholder_name = db.Column(db.String(255), nullable=False)
     billing_address = db.Column(db.String(255), nullable=False)
     credit_limit = db.Column(db.Numeric(10,2), nullable=False)
+
+
+
+# Payment model
+class Payment(db.Model):
+    __tablename__ = 'Payment'
+    id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.Integer, db.ForeignKey('Order.id'), nullable=False)
+    amount = db.Column(db.Float, nullable=False)
+    payment_method = db.Column(db.String(255), nullable=False)
+    card_id = db.Column(db.Integer, db.ForeignKey('Card.id'), nullable=False)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+
+
 
 # CartItem model
 class CartItem(db.Model):
