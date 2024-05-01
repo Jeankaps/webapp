@@ -19,9 +19,24 @@
             <strong>Name:</strong> {{ item.product.name }} <br>
             <strong>Description:</strong> {{ item.product.description }} <br>
             <strong>Price:</strong> ${{ item.product.price }} <br>
-            <form action="{{ url_for('cart.empty_cart') }}" method="post">
-                <button type="submit" class="btn btn-danger">Remove from Cart</button>
-            </form>
+            <div>
+                <button class="btn btn-info" onclick="submitEmptyCart()">Empty Cart</button>
+            </div>
+
+            <script>
+                function submitEmptyCart() {
+                    fetch('{{ url_for("cart.empty_cart") }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }).then(response => {
+                        if (response.ok) {
+                            window.location.href = '{{ url_for("cart.cart_view") }}';
+                        }
+                    });
+                }
+            </script>
         </li>
         {% endfor %}
     </ul>
