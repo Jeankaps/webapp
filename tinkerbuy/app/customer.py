@@ -4,7 +4,9 @@ from app.blueprints import customer
 
 
 # Customer dashboard route
-@customer.route('/customer/profile')
+@customer.route('/customer/settings')
 @login_required
-def profile():
-    return render_template('customer/profile.html')
+def settings():
+    if current_user.role == "administrator":
+        return redirect(url_for('admin.dashboard'))
+    return render_template('customer/settings.html')

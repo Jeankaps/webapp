@@ -29,14 +29,17 @@
         {% for order in orders %}
             <td>{{ order.id }}</td>
             <td>{{ order.created_at }}</td>
-            <td>
-                <form action="/orders/{{ order.id }}/delete">
-                    <button class="btn btn-danger">
-                        Delete
-                    </button>
-                </form>
-                
-            </td>
+            <tbody>
+                <td>
+                    <form action="/orders/{{ order.id }}/delete">
+                        <button class="btn btn-danger">
+                            Delete
+                        </button>
+                    </form>
+                    
+                </td>
+            </tbody>
+            
         {% endfor %}
     </table>
 
