@@ -48,6 +48,23 @@ def cart_remove(product_id):
 
     return redirect(url_for('cart.cart_view'))
 
+
+@cart.route('/cart/empty', methods=['POST'])
+@login_required
+def empty_cart():
+    # Delete all cart items for the current user directly
+    cart_items = current_user.cart_items
+    for item in cart_items:
+        db.session.delete(item)
+
+    # Commit the transaction
+    db.session.commit()
+
+    # Flash a success message
+    flash('Cart emptied successfully!', 'success')
+
+    # Redirect back to the cart view
+    return redirect(url_for('cart.cart_view'))
 '''
 # Cart update quantity route
 @cart.route('/cart/update/<int:product_id>', methods=['POST'])
