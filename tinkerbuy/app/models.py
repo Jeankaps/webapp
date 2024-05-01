@@ -24,17 +24,17 @@ class User(UserMixin, db.Model):
 
     # Add to cart helper method
     def add_to_cart(self, product):
-        cart_item = CartItem.query.filter_by(user_id=self.id, product_id=Product.id).first()
+        cart_item = CartItem.query.filter_by(user_id=self.id, product_id=product.id).first()
         if cart_item:
             cart_item.quantity += 1
         else:
-            cart_item = CartItem(user_id=self.id, product_id=Product.id, quantity=1)
+            cart_item = CartItem(user_id=self.id, product_id=product.id, quantity=1)
         db.session.add(cart_item)
         db.session.commit()
 
     # Remove from cart helper method
     def remove_from_cart(self, product):
-        cart_item = CartItem.query.filter_by(user_id=self.id, product_id=Product.id).first()
+        cart_item = CartItem.query.filter_by(user_id=self.id, product_id=product.id).first()
         if cart_item:
             db.session.delete(cart_item)
             db.session.commit()
@@ -58,6 +58,8 @@ class User(UserMixin, db.Model):
 
     # Relationship with Order model
     orders = db.relationship('Order', backref='customer', lazy='dynamic')
+
+   
 
 # Product model
 class Product(db.Model):
@@ -120,3 +122,6 @@ class CartItem(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('User.id'), nullable=False)
     product_id = db.Column(db.Integer, db.ForeignKey('Product.id'), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
+
+    # Relationship with Product model
+    product = db.relationship("Product", backref="cart_items" )

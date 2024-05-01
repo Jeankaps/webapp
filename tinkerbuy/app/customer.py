@@ -4,8 +4,7 @@ from app.blueprints import customer
 
 
 # Customer dashboard route
-@customer.route('/customer/dashboard')
-#@login_required
-def dashboard():
-    #return render_template('customer/dashboard.html')
-    return "<h1>CUSTOMER DASHBOARD</h1>"
+@customer.route('/customer/profile')
+@login_required
+def profile():
+    return render_template('customer/profile.html')

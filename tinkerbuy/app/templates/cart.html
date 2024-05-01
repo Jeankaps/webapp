@@ -2,4 +2,35 @@
 {% block title %} Cart {% endblock %}
 {% block content %}
 <h1>{{ current_user.name }}'s Cart</h1>
+
+{% with messages = get_flashed_messages()  %}
+{% if messages %}
+    <div class="notification h3 mb-3 font-weight-normal">
+                {{ messages[0] }}
+            </div>
+{% endif %}
+    
+{% endwith %}
+
+<div>
+  <ul>
+    {% for product in cart_items %}
+      <li>
+        <strong>Name:</strong> {{ product.name }} <br>
+        <strong>Description:</strong> {{ product.description }} <br>
+        <strong>Price:</strong> ${{ product.price }} <br>
+         <form action="/cart/remove/{{ product.id }}" method="post">
+            <button type="submit" class="btn btn-danger">Remove from Cart</button>
+        </form>
+      </li>
+    {% endfor %}
+</div>
+<div>
+    <h3>Your total is $ {{ total_price }}</h3> 
+</div>
+<div>
+    <form action="" method="post"><button class="btn btn-info">Empty Cart</button></form>
+    <form action="" method="post"><button class="btn btn-info">Pay Now</button></form>
+</div>
+
 {% endblock %}

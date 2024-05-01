@@ -1,8 +1,9 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
-from flask_login import login_required
+from flask import render_template, request, flash, redirect, url_for
+from flask_login import login_required, current_user
+from app.blueprints import orders
+from app import db 
+from app.models import Order
 
-# Create blueprint
-orders = Blueprint('orders', __name__)
 
 # Order create route
 @orders.route('/orders/create', methods=['GET', 'POST'])
@@ -27,15 +28,15 @@ def order_create():
         # Redirect to order list page
         return redirect(url_for('orders.order_list'))
 
-    return render_template('order/create.html')
+    return render_template('customer/create.html')
 
 # Order list route
 @orders.route('/orders')
 @login_required
 def order_list():
     orders = Order.query.all()
-    return render_template('order/list.html', orders=orders)
-
+    return render_template('orders.html', orders=orders)
+'''
 # Order edit route
 @orders.route('/orders/<int:order_id>/edit', methods=['GET', 'POST'])
 @login_required
@@ -59,7 +60,7 @@ def order_edit(order_id):
         return redirect(url_for('orders.order_list'))
 
     return render_template('order/edit.html', order=order)
-
+'''
 # Order delete route
 @orders.route('/orders/<int:order_id>/delete', methods=['POST'])
 @login_required

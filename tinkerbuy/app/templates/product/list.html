@@ -5,6 +5,14 @@
 {% block content  %}
     
 <h1>Product list</h1>
+{% with messages = get_flashed_messages()  %}
+{% if messages %}
+    <div class="notification h3 mb-3 font-weight-normal">
+                {{ messages[0] }}
+            </div>
+{% endif %}
+    
+{% endwith %}
 
 
 <form action="{{ url_for('products.product_list') }}"> <input type="text" name="q" placeholder="Search products..." value="{{ request.args.get('q', '') }}">
@@ -17,18 +25,27 @@
         <strong>Name:</strong> {{ product.name }} <br>
         <strong>Description:</strong> {{ product.description }} <br>
         <strong>Price:</strong> ${{ product.price }} <br>
-        <strong>Quantity:</strong> {{ product.quantity }} <br>
-        <strong>Created At:</strong> {{ product.created_at }} <br>
-        <strong>Updated At:</strong> {{ product.updated_at }} <br>
+        <form action="/cart/add/{{ product.id }}" method="post">
+            <button type="submit" class="btn btn-primary">Add to Cart</button>
+        </form>
+       
       </li>
     {% endfor %}
   </ul>
   
   {% if paginated_products.has_prev %}
-    <a href="{{ url_for('products.product_list', page=paginated_products.prev_num) }}">Previous</a>
+    <button type="button" class="btn btn-primary">
+        <a style="text-decoration: none;" class="btn btn-primary"
+        href="{{ url_for('products.product_list', page=paginated_products.prev_num) }}">Previous</a>
+    </button>
+
   {% endif %}
   
   {% if paginated_products.has_next %}
-    <a href="{{ url_for('products.product_list', page=paginated_products.next_num) }}">Next</a>
+    <button type="button" class="btn btn-primary">
+        <a style="text-decoration: none;" class="btn btn-primary"
+        href="{{ url_for('products.product_list', page=paginated_products.next_num) }}">Next</a>
+    </button>
+   
   {% endif %}
 {% endblock %}
