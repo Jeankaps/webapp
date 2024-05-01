@@ -5,30 +5,33 @@
 
 {% with messages = get_flashed_messages()  %}
 {% if messages %}
-    <div class="notification h3 mb-3 font-weight-normal">
-                {{ messages[0] }}
-            </div>
+<div class="notification h3 mb-3 font-weight-normal">
+    {{ messages[0] }}
+</div>
 {% endif %}
-    
-{% endwith %}
 
-<div>
-  <ul>
-    {% for item in cart_items %}
-      <li>
-        <strong>Name:</strong> {{ item.product.name }} <br>
-        <strong>Description:</strong> {{ item.product.description }} <br>
-        <strong>Price:</strong> ${{ item.product.price }} <br>
-         <form action="/cart/remove/{{ item.product.id }}" method="post">
-            <button type="submit" class="btn btn-danger">Remove from Cart</button>
-        </form>
-      </li>
-    {% endfor %}
-    </ul>
-</div>
-<div>
-    <h3>Your total is $ {{ total_price }}</h3> 
-</div>
+{% endwith %}
+{% extends 'base.html' %}
+{% block title %} Cart {% endblock %}
+{% block content %}
+<h1>{{ current_user.name }}'s Cart</h1>
+{% if cart_items %}
+<ul>
+    <li>
+        <strong>Product:</strong>{{item.product.name}}<br />
+        <strong>Price:</strong>{{item.product.price}}<br />
+        <strong>Quantity::</strong>{{item.product.quantity}}<br />
+        <strong>Product:</strong>{{item.product.price*item.quantity}}<br />
+    </li>
+    {% end for %}
+</ul>
+<h3>Total Price: ${{total_price}}</h3>
+{% else %}
+<p>Your cart is empty.</p>
+{% endif %}
+{% endblock %}
+
+
 <div>
     <form action="" method="post"><button class="btn btn-info">Empty Cart</button></form>
     <form action="" method="post"><button class="btn btn-info">Pay Now</button></form>
