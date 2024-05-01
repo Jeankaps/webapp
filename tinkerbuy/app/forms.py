@@ -29,3 +29,7 @@ class LoginForm(FlaskForm):
 
 class PurchaseItemForm(FlaskForm):
     submit = SubmitField(label='Purchase Item!')
+
+class SearchFilterForm(FlaskForm):
+    query = StringField(label="Search" )
+    submit = SubmitField(label="q")

@@ -1,22 +1,20 @@
 from flask import render_template, request, flash, redirect, url_for
-from flask_login import login_required
+from flask_login import login_required, current_user 
 from app.blueprints import cart
 
 
 # Cart view route
 @cart.route('/cart/')
-#@login_required
+@login_required
 def cart_view():
-    '''
     # Get cart items for current user
     cart_items = current_user.cart_items
 
     # Calculate total price
     total_price = sum(item.product.price * item.quantity for item in cart_items)
 
-    return render_template('cart/cart.html', cart_items=cart_items, total_price=total_price)
-'''
-    return "<h1>CART </h1>"
+    return render_template('cart.html', cart_items=cart_items, total_price=total_price)
+
 '''
 # Cart add item route
 @cart.route('/cart/add/<int:product_id>')

@@ -3,7 +3,7 @@ from flask_login import login_required
 
 # Create blueprint
 inventory = Blueprint('inventory', __name__)
-
+'''
 # Inventory view route
 @inventory.route('/inventory')
 @login_required
@@ -33,3 +33,4 @@ def inventory_update(product_id):
     flash('Product quantity updated!', 'success')
 
     return redirect(url_for('inventory.inventory_view'))
+    '''

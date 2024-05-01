@@ -4,9 +4,9 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from app.blueprints import orders
+from app.blueprints import reports
 
-# Create blueprint
-reports = Blueprint('reports', __name__)
 
 # Sales report route
 @reports.route('/reports/sales')
@@ -37,6 +37,7 @@ def sales_report():
 
     return render_template('reports/sales.html', report=report)
 
+'''
 # Inventory report route
 @reports.route('/reports/inventory')
 @login_required
@@ -79,3 +80,4 @@ def customer_report():
     }
 
     return render_template('reports/customers.html', report=report)
+    '''

@@ -1,8 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required
-
-# Create blueprint
-payments = Blueprint('payments', __name__)
+from app.blueprints import payments
+from app import db
 
 # Payment create route
 @payments.route('/payments/create', methods=['GET', 'POST'])

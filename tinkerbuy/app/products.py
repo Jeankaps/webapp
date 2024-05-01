@@ -1,14 +1,35 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import render_template, request, flash, redirect, url_for
 from flask_login import login_required
+from flask_pagination import Pagination
 from app.blueprints import products
 from app.models import Product
 
 
 # Product list route
-@products.route('/products')
+@products.route('/products', methods=['GET','POST'])
+@login_required
 def product_list():
-    products = Product.query.all()
-    return render_template('product/list.html', products=products)
+    # Get the page number from query parameters, default to 1
+    page = request.args.get('page', 1, type=int)
+
+    # Define the number of products per page
+    per_page = 10
+
+    # Get the search query from request parameters
+    query = request.args.get('q')
+
+    # Filter products based on the search query
+    if query:
+        products = Product.query.filter(Product.name.ilike(f"%{query}%"))
+    else:
+        products = Product.query
+
+    # Paginate the products
+    paginated_products = products.paginate(page=page, per_page=per_page)
+
+    return render_template('product/list.html', products=paginated_products.items, paginated_products=paginated_products)
+    
+
 '''
 # Product create route
 @products.route('/products/create', methods=['GET', 'POST'])

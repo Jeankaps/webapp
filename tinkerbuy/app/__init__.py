@@ -48,17 +48,19 @@ from app.blueprints import admin
 from app.blueprints import customer
 from app.blueprints import cart
 from app.blueprints import products
-'''
-from app.orders import orders
-from app.payments import payments
-from app.reports import reports
-'''
+from app.blueprints import orders
+from app.blueprints import payments
+from app.blueprints import reports
+
 # Import views 
 from app.admin import * 
 from app.auth import *
 from app.cart import *
 from app.customer import * 
 from app.products import * 
+from app.orders import *
+from app.payments import *
+from app.reports import *
 
 # Register blueprints
 app.register_blueprint(admin, url_prefix="/")
@@ -66,8 +68,6 @@ app.register_blueprint(customer)
 app.register_blueprint(auth)
 app.register_blueprint(cart) # need a prefix like /logged_in_User 
 app.register_blueprint(products)
-'''
 app.register_blueprint(orders)
 app.register_blueprint(payments)
 app.register_blueprint(reports)
-'''
