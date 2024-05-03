@@ -4,37 +4,46 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container">
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <div class="notification is-danger h3 mb-3 font-weight-normal">
-                {{ messages[0] }}
+    <div class="container text-centered">
+        <div class="row">
+            <div class="col"></div>
+            <div class="col-6">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="notification is-danger h3 mb-2 font-weight-normal">
+                    {{ messages[0] }}
+                </div>
+            {% endif %}
+            {% endwith %}
+            <form method="POST" class="form-signin" style="color:black">
+                {{ form.hidden_tag() }}
+               {# <h1 class="h3 mb-3 font-weight-normal">
+                    Please Login
+                </h1> #}
+                <img class="mb-3 text-centered" height="200" width="200" src="https://yt3.ggpht.com/ytc/AKedOLSwbIS15GPvEJErdhocyurvVHlN5rH99flWssSS=s900-c-k-c0x00ffffff-no-rj"  alt="">
+                <br>
+                {{ form.username.label() }}
+                {{ form.username(class="form-control", placeholder="Username") }}
+
+                {{ form.password.label() }}
+                {{ form.password(class="form-control", placeholder="Password") }}
+
+                <br>
+
+
+                <div class="checkbox mb-3">
+                <h6>Do not have an account?</h6>
+                <a class="btn btn-sm btn-secondary" href="{{ url_for('auth.register') }}">Register</a>
+                </div>
+
+                {{ form.submit(class="btn btn-lg btn-block btn-primary") }}
+
+            </form>
+    
+
             </div>
-        {% endif %}
-        {% endwith %}
-        <form method="POST" class="form-signin" style="color:black">
-            {{ form.hidden_tag() }}
-            <img class="mb-4" height="250" width="250" src="https://yt3.ggpht.com/ytc/AKedOLSwbIS15GPvEJErdhocyurvVHlN5rH99flWssSS=s900-c-k-c0x00ffffff-no-rj"  alt="">
-            <h1 class="h3 mb-3 font-weight-normal">
-                Please Login
-            </h1>
-            <br>
-            {{ form.username.label() }}
-            {{ form.username(class="form-control", placeholder="Username") }}
-
-            {{ form.password.label() }}
-            {{ form.password(class="form-control", placeholder="Password") }}
-
-            <br>
-
-
-            <div class="checkbox mb-3">
-               <h6>Do not have an account?</h6>
-               <a class="btn btn-sm btn-secondary" href="{{ url_for('auth.register') }}">Register</a>
-            </div>
-
-            {{ form.submit(class="btn btn-lg btn-block btn-primary") }}
-
-        </form>
-    </div>
+            <div class="col"></div>
+        </div>
+        <div class="row"></div>
+   </div>
 {% endblock %}

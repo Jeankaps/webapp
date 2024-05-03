@@ -34,12 +34,13 @@ def cart_add(product_id):
     return redirect(url_for('products.product_list'))
 
 # Cart remove item route
-@cart.route('/cart/remove/<int:product_id>', methods=['POST'])
+@cart.route('/cart/remove/<int:product_id>/', methods=['GET','POST'])
 @login_required
 def cart_remove(product_id):
     # Get product from database
     product = Product.query.get_or_404(product_id)
 
+    '''
     # Remove product from cart
     current_user.remove_from_cart(product)
 
@@ -47,6 +48,8 @@ def cart_remove(product_id):
     flash('Product removed from cart!', 'success')
 
     return redirect(url_for('cart.cart_view'))
+    '''
+    return f"<h1>Remove {product_id=}</h1>"
 
 '''
 # Cart update quantity route
@@ -72,6 +75,7 @@ def cart_update(product_id):
 @cart.route('/cart/checkout', methods=['GET','POST'])
 @login_required
 def cart_checkout():
+    '''
     # Get cart items for current user
     cart_items = current_user.cart_items
 
@@ -107,3 +111,5 @@ def cart_checkout():
     flash('Order placed successfully!', 'success')
 
     return redirect(url_for('orders.order_list'))
+    '''
+    return "<h1>Checkout</h1>"

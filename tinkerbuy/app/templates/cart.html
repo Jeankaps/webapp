@@ -19,6 +19,7 @@
         <strong>Name:</strong> {{ product.name }} <br>
         <strong>Description:</strong> {{ product.description }} <br>
         <strong>Price:</strong> ${{ product.price }} <br>
+        <strong>id:</strong> ${{ product.id }} <br>
          <form action="/cart/remove/{{ product.id }}" method="post">
             <button type="submit" class="btn btn-danger">Remove from Cart</button>
         </form>

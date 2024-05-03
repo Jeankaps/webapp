@@ -2,8 +2,10 @@
 {% block title %} TinkerBuy - SingUp {% endblock %}
 {% block content %}
 
-    <div class="container">
-
+    <div class="container text-centered">
+        <div class="row">
+            <div class="col"></div>
+            <div class="col-6">
         {% with messages = get_flashed_messages() %}
         {% if messages %}
             <div class="notification is-danger h3 mb-3 font-weight-normal">
@@ -41,6 +43,12 @@
             {{ form.submit(class="btn btn-lg btn-block btn-primary") }}
 
         </form>
+     </div>
+            <div class="col"></div>
+        </div>
+        <div class="row">
+
+        </div>
     </div>
 {% endblock %}
 

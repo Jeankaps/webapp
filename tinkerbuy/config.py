@@ -1,7 +1,7 @@
 import os
 class Config():
     # Database configuration
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'mysql://root:hardtoguess@172.17.0.1/development'
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'mysql://dev:test123@15.222.93.246/development'
 
     # Secret key for session management
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev'
