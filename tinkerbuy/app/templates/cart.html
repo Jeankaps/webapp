@@ -1,7 +1,75 @@
 {% extends 'base.html' %}
 {% block title %} Cart {% endblock %}
 {% block content %}
-<h1>{{ current_user.name }}'s Cart</h1>
+
+<div class="container">
+  <!-- Page title -->
+  <div class="row">
+    <div class="col"></div>
+    <div class="col">
+      <h1>{{ current_user.name }}'s Cart</h1>
+    </div>
+    <div class="col"></div>
+  </div>
+  <hr class="hidden-hr">
+  <!-- cart content -->
+  <div class="row">
+    <div class="col"></div>
+    <div class="col-12">
+      <table class="cart-table">
+        <thead>
+          <tr></tr>
+        </thead>
+        <tbody>
+          {% for product, qty in basket.items() %}
+          <tr>
+            <td>
+              <img src="/static/img/product.jpeg" alt="{{ product.name }}" class="cart-img" >
+            </td>
+            <td>
+              <strong>Name:</strong> {{ product.name }} <br>
+              <strong>Description:</strong> {{ product.description }} <br>
+            </td>
+            <td>
+              <strong>Amount:</strong> {{ qty }} <br>
+            </td>
+            <td>
+               <strong>Price:</strong> ${{ product.price * qty }} <br>
+            </td>
+            <td>
+              <form action="/cart/remove/{{ product.id }}" method="post">
+                <button type="submit" class="btn btn-danger">Remove from Cart</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="col"></div>
+  </div>
+  <hr class="hidden-hr">
+  <!-- total -->
+  <div class="row">
+    <div class="col"></div>
+    <div class="col">
+      <h3>Your total is $ {{ total_price }}</h3> 
+    </div>
+    <div class="col"></div>
+  </div>
+
+  <hr class="hidden-hr">
+  <!-- Payment button -->
+  <div class="row">
+    <div class="col"></div>
+    <div class="col">
+      <form action="/cart/checkout" method="post"><button class="btn btn-lg btn-info">Continue</button></form>
+    </div>
+    <div class="col"></div>
+  </div>
+</div>
+
+
 
 {% with messages = get_flashed_messages()  %}
 {% if messages %}
@@ -12,25 +80,5 @@
     
 {% endwith %}
 
-<div>
-  <ul>
-    {% for product in cart_items %}
-      <li>
-        <strong>Name:</strong> {{ product.name }} <br>
-        <strong>Description:</strong> {{ product.description }} <br>
-        <strong>Price:</strong> ${{ product.price }} <br>
-        <strong>id:</strong> ${{ product.id }} <br>
-         <form action="/cart/remove/{{ product.id }}" method="post">
-            <button type="submit" class="btn btn-danger">Remove from Cart</button>
-        </form>
-      </li>
-    {% endfor %}
-</div>
-<div>
-    <h3>Your total is $ {{ total_price }}</h3> 
-</div>
-<div>
-    <form action="/cart/checkout" method="post"><button class="btn btn-info">Pay Now</button></form>
-</div>
 
 {% endblock %}

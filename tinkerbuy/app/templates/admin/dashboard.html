@@ -3,49 +3,68 @@
     Admin Settings 
 {% endblock %}
 {% block content  %}
+<div class="container">
+    <div class="row">
+        <h1>Admin Dashboard</h1>
+    </div>
+
+
+<hr>
+    <div class="row">
+        <!-- Report -->
+        <h3> Reports </h3>
+        <form action="/reports/sales" method="post">
+            <label for="report">Generate Sales Report</label>
+            <button type="submit" class="btn btn-info">Generate report</button>
+        </form>
+    </div>
     
-    <h1>Admin Dashboard</h1>
-     <!-- Report -->
-    <h3> Reports </h3>
-    <form action="" method="post">
-        <label for="report">Generate Sales Report</label>
-        <button type="submit" class="btn btn-info">Generate report</button>
-    </form>
-    <hr>
-    <h3>Manage Users</h3>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Username</th>
-                <th>Role</th>
-                <th>Creation date</th>
-                <th>Action</th>
-            </tr>
-            <tbody>
-                {# Data  #}
-                {% for user  in users  %}
-                    <tr>
-                        <td>{{ user.id}}</td>
-                        <td>{{ user.name}}</td>
-                        <td>{{ user.role}}</td>
-                        <td>{{ user.created_at}}</td>
-                        <td>
-                            {% if user.name == 'dev' or user.name == 'admin' %}
-                               {# Don't show delete button #} 
-                            {% else %}
-                                <form action="/admin/{{ user.id }}/delete" class="btn btn-danger" method="post">
-                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                </form>
-                            {% endif %}
-                           
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </thead>
-        
-    </table>
+
+<hr>
+    <div class="row">
+        <h3>Manage Users</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Role</th>
+                    <th>Creation date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+                <tbody>
+                    {# Data  #}
+                    {% for user  in users  %}
+                        <tr>
+                            <td>{{ user.id}}</td>
+                            <td>{{ user.name}}</td>
+                            <td>{{ user.role}}</td>
+                            <td>{{ user.created_at}}</td>
+                            <td>
+                                {% if user.name == 'dev' or user.name == 'admin' %}
+                                {# Don't show delete button #} 
+                                {% else %}
+                                    <form action="/admin/{{ user.id }}/delete" class="btn btn-danger" method="post">
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                {% endif %}
+                            
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            
+        </table>
+    </div>
+    
+    
+    <div class="row"></div>
+</div>
+    
+    
+
+    
 
    
 {% endblock %}

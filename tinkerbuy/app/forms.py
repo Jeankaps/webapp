@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, HiddenField
-from wtforms.validators import Length, EqualTo, Email, DataRequired, ValidationError
+from wtforms import StringField, PasswordField, SubmitField, HiddenField, SelectField, IntegerField
+from wtforms.validators import Length, EqualTo, Email, DataRequired, ValidationError,NumberRange
 from .models import User
 
 
@@ -34,3 +34,13 @@ class SearchFilterForm(FlaskForm):
     query = StringField(label="Search" )
     submit = SubmitField(label="q")
 
+
+class CreditCardForm(FlaskForm):
+    card_number = StringField(label='Card Number', validators=[DataRequired(), Length(min=16, max=16)])
+    card_holder = StringField('Card Holder', validators=[DataRequired(), Length(max=100)])
+    expiration_month = SelectField('Expiration Month', choices=[(str(i), str(i)) for i in range(1, 13)], validators=[DataRequired()])
+    expiration_year = SelectField('Expiration Year', choices=[(str(i), str(i)) for i in range(2024, 2034)], validators=[DataRequired()])
+    cvv = IntegerField('CVV', validators=[DataRequired(), NumberRange(min=100, max=999)])
+    submit = SubmitField(label="PAY NOW")
+
+    

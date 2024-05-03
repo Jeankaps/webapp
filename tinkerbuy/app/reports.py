@@ -1,4 +1,4 @@
-from flask import render_template, request, flash, redirect, url_for
+from flask import render_template, request, flash, redirect, url_for, send_file
 from flask_login import login_required
 import pandas as pd
 import numpy as np
@@ -8,9 +8,10 @@ from app.blueprints import orders
 from app.blueprints import reports
 from app.models import *
 
-@reports.route('/reports/sales')
+@reports.route('/reports/sales', methods=['POST'])
+@login_required
 #def generate_sales_report(start_date, end_date):
-def generate_sales_report(start_date, end_date):
+def generate_sales_report():
    
     # Filter order items based on the date range
     #order_items = OrderItem.query.join(Order).filter(Order.created_at >= start_date, Order.created_at <= end_date).all()
@@ -25,7 +26,7 @@ def generate_sales_report(start_date, end_date):
     for item in order_items:
         product_sales.setdefault(item.product.name, 0)
         product_sales[item.product.name] += item.quantity * item.product.price
-
+    '''
     # Create a dictionary with the calculated data
     sales_report = {
         #'start_date': start_date,
@@ -34,8 +35,32 @@ def generate_sales_report(start_date, end_date):
         'total_orders': total_orders,
         'product_sales': product_sales
     }
+   # Convert the dictionary to a pandas DataFrame
+    df = pd.DataFrame.from_dict(sales_report, orient='index', columns=['Value'])
 
-    return sales_report
+    # Write the DataFrame to a CSV file
+    csv_path = 'app/reports/sales_reports.csv'
+    df.to_csv(csv_path)
+    send_file_path = 'reports/sales_reports.csv'
+'''
+    # Combine DataFrames
+    sales_report = {
+        'total_revenue': total_revenue,
+        'total_orders': total_orders,
+    }
+
+    # Convert the dictionary to a pandas DataFrame
+    df = pd.DataFrame.from_dict(sales_report, orient='index', columns=['Value'])
+
+    # Write the DataFrame to a CSV file
+    csv_path = 'app/reports/sales_reports.csv'
+    df.to_csv(csv_path, index=False)  # Don't include index row in CSV
+    send_file_path = 'reports/sales_reports.csv'
+
+    # send the file to the user
+
+    return send_file(send_file_path, as_attachment=True)
+
 '''
 # Sales report route
 @reports.route('/reports/sales')

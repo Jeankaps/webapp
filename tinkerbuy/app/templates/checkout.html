@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}
+    Checkout 
+{% endblock %}  
+{% block content  %}
+    <div class="container">
+        <div class="row text-centered">
+            <div class="col"></div>
+            {#<div class="col"><h1> Checkout </h1></div>#}
+            <div class="col"></div>
+            
+        </div>
+        <div class="row"></div>
+        <div class="row">
+            <div class="col"></div>
+            <div class="col-6">
+                
+                <form method="POST" class="form-signin" style="color:black">
+                    {{ form.hidden_tag() }}
+
+                    <br>
+                    <h1 class="h3 mb-3 font-weight-normal">
+                        Payment method
+                    </h1> 
+                    <br>
+
+                    {{ form.card_holder.label() }}
+                    {{ form.card_holder(class="form-control", placeholder="Full Name") }}
+
+                    {{ form.card_number.label() }}
+                    {{ form.card_number(class="form-control", placeholder="Card Number") }}
+
+                    {{ form.expiration_month.label() }}
+                    {{ form.expiration_month(class="form-control") }}
+
+                    {{ form.expiration_year.label() }}
+                    {{ form.expiration_year(class="form-control", placeholder="2024") }}
+
+                    {{ form.cvv.label() }}
+                    {{ form.cvv(class="form-control", placeholder="***") }}
+
+                    <br>
+
+
+                    <div class="checkbox mb-3">
+                    <h6></h6>
+                    <a class="btn btn-md btn-danger btn-block" href="{{ url_for('cart.cart_view') }}">Cancel</a>
+                    </div>
+
+                    {{ form.submit(class="btn btn-lg btn-block btn-success") }}
+
+                </form>
+        
+
+            </div>
+
+            <div class="col"></div>
+
+            <div class="col-4">
+                    <hr class="hidden-hr">
+                    <h1 class="h3 mb-3 font-weight-normal">
+                       Order Summary 
+                    </h1> 
+                    <p>list of orders</p>
+                    <hr>
+                    <div class="checkbox mb-3">
+                        <h4>Total: $</h4>
+                    </div>
+            </div>
+        </div>
+        <div class="row"></div>
+    </div>
+{% endblock %}
