@@ -34,7 +34,7 @@ def order_create():
 @orders.route('/orders')
 @login_required
 def order_list():
-    orders = Order.query.all()
+    orders = Order.query.filter_by(customer_id=current_user.id).all()
     return render_template('orders.html', orders=orders)
 '''
 # Order edit route
