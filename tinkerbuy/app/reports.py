@@ -51,15 +51,23 @@ def generate_sales_report():
 
     # Convert the dictionary to a pandas DataFrame
     df = pd.DataFrame.from_dict(sales_report, orient='index', columns=['Value'])
+    print(df)
+
+    table = Payment.query.all() 
+    data = [(item.order_id, item.amount, item.created_at) for item in table ]
+    df2 = pd.DataFrame(data, columns=['Order_id', 'Amount', 'Date'])
+    df2['Date'] = df2['Date'].apply(lambda x: x.strftime('%Y-%m-%d'))
+
 
     # Write the DataFrame to a CSV file
     csv_path = "/tmp/sales_reports.csv"
-    df.to_csv(csv_path, index=False)  # Don't include index row in CSV
+    df2.to_csv(csv_path, index=False)  # Don't include index row in CSV
     send_file_path = '/tmp/sales_reports.csv'
 
     # send the file to the user
 
     return send_file(send_file_path, as_attachment=True)
+    return sales_report
 
 '''
 # Sales report route
