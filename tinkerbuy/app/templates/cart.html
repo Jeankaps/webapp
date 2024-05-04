@@ -34,7 +34,7 @@
               <strong>Amount:</strong> {{ qty }} <br>
             </td>
             <td>
-               <strong>Price:</strong> ${{ product.price * qty }} <br>
+               <strong>Price:</strong> ${{ product.price * qty|round(2) }} <br>
             </td>
             <td>
               <form action="/cart/remove/{{ product.id }}" method="post">
@@ -53,7 +53,7 @@
   <div class="row">
     <div class="col"></div>
     <div class="col">
-      <h3>Your total is $ {{ total_price }}</h3> 
+      <h3>Your total is $ {{ total_price|round(2) }}</h3> 
     </div>
     <div class="col"></div>
   </div>

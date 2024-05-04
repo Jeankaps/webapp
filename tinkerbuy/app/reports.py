@@ -53,9 +53,9 @@ def generate_sales_report():
     df = pd.DataFrame.from_dict(sales_report, orient='index', columns=['Value'])
 
     # Write the DataFrame to a CSV file
-    csv_path = 'app/reports/sales_reports.csv'
+    csv_path = "/tmp/sales_reports.csv"
     df.to_csv(csv_path, index=False)  # Don't include index row in CSV
-    send_file_path = 'reports/sales_reports.csv'
+    send_file_path = '/tmp/sales_reports.csv'
 
     # send the file to the user
 
